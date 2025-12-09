@@ -1,0 +1,232 @@
+@charset "UTF-8";
+/* 폰트: 나눔스퀘어 */
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+/* --- Reset & Basic --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'NanumSquare', sans-serif;
+}
+
+body {
+    background-color: #f4f5f7;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* --- App Container --- */
+#app-container {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f5f7;
+    display: flex;
+}
+
+/* --- Sidebar (Left) --- */
+.sidebar {
+    width: 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 50px;
+    z-index: 10;
+}
+
+.nav-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6vh; 
+}
+
+/* 라인: 2px 두께의 직사각형 대시 라인 */
+.timeline-line {
+    position: absolute;
+    left: 19px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    
+    background-image: linear-gradient(to bottom, #c0c0c0 55%, transparent 55%);
+    background-size: 2px 12px;
+    
+    border: none;
+    z-index: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+/* 점 Wrapper */
+.dot-wrapper {
+    width: 40px; 
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+}
+
+/* 점(Dot): 기본 크기 14x14 */
+.dot {
+    width: 14px;
+    height: 14px;
+    background-color: #d1d1d1;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nav-text {
+    font-size: 16px; 
+    font-weight: 700; /* 기본 Bold */
+    color: #a0a0a0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.3s, font-weight 0.3s;
+}
+
+/* Active State: 활성화 시 크기 20x20 */
+.nav-item.active .dot {
+    width: 20px;
+    height: 20px;
+    background-color: #CEF09F; 
+    box-shadow: 0 0 0 4px rgba(206, 240, 159, 0.4);
+    animation: pulse 2s infinite;
+}
+
+/* (수정됨) 왼쪽 메뉴 선택 시: ExtraBold 적용 */
+.nav-item.active .nav-text {
+    color: #444;
+    font-weight: 800; /* ExtraBold */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(206, 240, 159, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(206, 240, 159, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(206, 240, 159, 0); }
+}
+
+
+/* --- Main Content (Right) --- */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 80px 50px 0; 
+}
+
+/* --- Header --- */
+.header {
+    width: 100%;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    min-height: auto; 
+}
+
+.header-center {
+    position: absolute;
+    left: 45%; 
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* (수정됨) 숫자 배지: 아래 간격 추가, 숫자 위치 1px 내림 */
+.step-badge {
+    width: 32px;
+    height: 32px;
+    background-color: #CEF09F;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: 16px;
+    color: #333;
+    
+    margin-bottom: 9px; /* 간격 늘림 (기존 5px -> 9px) */
+    padding-bottom: 0;  /* 기존 padding-bottom: 2px 제거 */
+    padding-top: 1px;   /* 시각적으로 1px 내림 */
+}
+
+/* (수정됨) 타이틀: Heavy(900) 적용 */
+.page-title {
+    font-size: 24px;
+    font-weight: 900; /* Heavy */
+    color: #222;
+}
+
+/* 우측 칩 영역 */
+.chips-container {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    padding-top: 5px;
+}
+
+/* (수정됨) 칩 디자인: 선택 안함 (Bold, E9E9E7, 878787) */
+.chip {
+    padding: 8px 20px;
+    border-radius: 999px; 
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    background-color: #E9E9E7;
+    color: #878787;
+    font-weight: 700; /* Bold */
+}
+
+.chip:hover {
+    background-color: #dcdcdc;
+}
+
+/* (수정됨) 칩 디자인: 선택됨 (ExtraBold, CEF09F, 2F2F2F) */
+.chip.active {
+    background-color: #CEF09F;
+    color: #2F2F2F;
+    font-weight: 800; /* ExtraBold */
+}
+
+
+/* --- Video Area --- */
+.video-frame {
+    flex: 1;
+    width: 100%;
+    background-color: transparent; 
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.video-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.video-player.active {
+    opacity: 1;
+    z-index: 2;
+}

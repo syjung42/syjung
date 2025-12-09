@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Setup Presentation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app-container">
+        <!-- 왼쪽 사이드바 -->
+        <nav class="sidebar">
+            <div class="nav-wrapper">
+                <!-- 직사각형 점선 라인 -->
+                <div class="timeline-line"></div>
+                
+                <div class="nav-item" id="nav-setup" onclick="handleMenuClick('setup')">
+                    <div class="dot-wrapper"><div class="dot"></div></div>
+                    <span class="nav-text">SETUP</span>
+                </div>
+
+                <div class="nav-item" id="nav-story" onclick="handleMenuClick('story')">
+                    <div class="dot-wrapper"><div class="dot"></div></div>
+                    <span class="nav-text">STORY</span>
+                </div>
+
+                <div class="nav-item" id="nav-painter" onclick="handleMenuClick('painter')">
+                    <div class="dot-wrapper"><div class="dot"></div></div>
+                    <span class="nav-text">PAINTER</span>
+                </div>
+
+                <div class="nav-item" id="nav-export" onclick="handleMenuClick('export')">
+                    <div class="dot-wrapper"><div class="dot"></div></div>
+                    <span class="nav-text">EXPORT</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-center">
+                    <div class="step-badge" id="step-badge">1</div>
+                    <div class="page-title" id="page-title">스마트 셋업</div>
+                </div>
+
+                <div class="chips-container" id="chips-container"></div>
+            </header>
+
+            <div class="video-frame">
+                <video id="video-1" class="video-player active" muted playsinline></video>
+                <video id="video-2" class="video-player" muted playsinline></video>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- 데이터 설정: Cloudinary URL 적용 ---
+        const menuData = {
+            setup: { 
+                index: 1, 
+                title: "스마트 셋업", 
+                chips: [
+                    { name: "스마트 셋업", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261429/%E1%84%89%E1%85%B3%E1%84%86%E1%85%A1%E1%84%90%E1%85%B3_%E1%84%89%E1%85%A6%E1%86%BA%E1%84%8B%E1%85%A5%E1%86%B8_bf7oes.mp4" } 
+                ] 
+            },
+            story: { 
+                index: 2, 
+                title: "스토리 모드", 
+                chips: [
+                    { name: "스토리 모드", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261051/%E1%84%89%E1%85%B3%E1%84%90%E1%85%A9%E1%84%85%E1%85%B5_%E1%84%86%E1%85%A9%E1%84%83%E1%85%B3_f9v2jd.mp4" },
+                    { name: "스마트 태깅", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261503/%E1%84%89%E1%85%B3%E1%84%86%E1%85%A1%E1%84%90%E1%85%B3_%E1%84%90%E1%85%A2%E1%84%80%E1%85%B5%E1%86%BC_s96ukz.mp4" },
+                    { name: "퀵 어시", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261623/%E1%84%8F%E1%85%B1%E1%86%A8_%E1%84%8B%E1%85%A5%E1%84%89%E1%85%B5_hktrgl.mp4" },
+                    { name: "오토콘티", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261803/%E1%84%8B%E1%85%A9%E1%84%90%E1%85%A9%E1%84%8F%E1%85%A9%E1%86%AB%E1%84%90%E1%85%B5_c8ipc5.mp4" }
+                ] 
+            },
+            painter: { 
+                index: 3, 
+                title: "페인터 모드", 
+                chips: [
+                    { name: "페인터 모드", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261867/%E1%84%91%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%90%E1%85%A5_%E1%84%86%E1%85%A9%E1%84%83%E1%85%B3_vm0p4c.mp4" },
+                    { name: "360 카메라뷰", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261984/360_%E1%84%8F%E1%85%A1%E1%84%86%E1%85%A6%E1%84%85%E1%85%A1%E1%84%87%E1%85%B2_bnf4jr.mp4" },
+                    { name: "라인 클린업", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261947/%E1%84%85%E1%85%A1%E1%84%8B%E1%85%B5%E1%86%AB_%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%86%AB%E1%84%8B%E1%85%A5%E1%86%B8_p4tx9k.mp4" },
+                    { name: "오토페인트", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261959/%E1%84%8B%E1%85%A9%E1%84%90%E1%85%A9%E1%84%91%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%90%E1%85%B3_o8tqpn.mp4" }
+                ] 
+            },
+            export: { 
+                index: 4, 
+                title: "내보내기", 
+                chips: [
+                    { name: "오토리뷰", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261967/%E1%84%8B%E1%85%A9%E1%84%90%E1%85%A9%E1%84%85%E1%85%B5%E1%84%87%E1%85%B2_wg4p6z.mp4" },
+                    { name: "스마트 세이프가드", url: "https://res.cloudinary.com/denadh8vd/video/upload/v1765261830/%E1%84%89%E1%85%B3%E1%84%86%E1%85%A1%E1%84%90%E1%85%B3_%E1%84%89%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%91%E1%85%B3%E1%84%80%E1%85%A1%E1%84%83%E1%85%B3_zuzc3c.mp4" }
+                ] 
+            }
+        };
+
+        let playlist = [];
+        Object.keys(menuData).forEach(key => {
+            menuData[key].chips.forEach(chipData => {
+                playlist.push({
+                    menuKey: key,
+                    chipName: chipData.name,
+                    url: chipData.url // Cloudinary URL
+                });
+            });
+        });
+
+        let currentIndex = 0;
+        let activeVideoPlayer = 1;
+
+        const video1 = document.getElementById('video-1');
+        const video2 = document.getElementById('video-2');
+        const stepBadge = document.getElementById('step-badge');
+        const pageTitle = document.getElementById('page-title');
+        const chipsContainer = document.getElementById('chips-container');
+        const navItems = {
+            setup: document.getElementById('nav-setup'),
+            story: document.getElementById('nav-story'),
+            painter: document.getElementById('nav-painter'),
+            export: document.getElementById('nav-export')
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            playSequence(0);
+        });
+
+        function playSequence(index) {
+            if (index >= playlist.length) index = 0;
+            if (index < 0) index = playlist.length - 1;
+            currentIndex = index;
+
+            const item = playlist[currentIndex];
+            updateUI(item);
+
+            const currentVideo = activeVideoPlayer === 1 ? video1 : video2;
+            const nextVideo = activeVideoPlayer === 1 ? video2 : video1;
+
+            // URL 로드
+            nextVideo.src = item.url;
+            nextVideo.load();
+
+            nextVideo.oncanplay = () => {
+                nextVideo.play().then(() => {
+                    // 화면 전환 (Fade In)
+                    nextVideo.classList.add('active');
+                    currentVideo.classList.remove('active');
+                    
+                    // 이전 영상 정리
+                    setTimeout(() => {
+                        currentVideo.pause();
+                        currentVideo.currentTime = 0;
+                        currentVideo.onended = null;
+                    }, 500);
+
+                    // 영상 종료 시 다음 영상 재생 (30초 제한 없음, 영상 길이만큼 재생)
+                    nextVideo.onended = () => {
+                        playSequence(currentIndex + 1);
+                    };
+
+                    activeVideoPlayer = activeVideoPlayer === 1 ? 2 : 1;
+                }).catch(e => console.error("Play failed", e));
+                
+                nextVideo.oncanplay = null;
+            };
+        }
+
+        function updateUI(item) {
+            const data = menuData[item.menuKey];
+            Object.values(navItems).forEach(el => el.classList.remove('active'));
+            navItems[item.menuKey].classList.add('active');
+
+            stepBadge.innerText = data.index;
+            pageTitle.innerText = data.title;
+
+            chipsContainer.innerHTML = '';
+            data.chips.forEach(chipData => {
+                const btn = document.createElement('div');
+                btn.className = 'chip';
+                btn.innerText = chipData.name;
+                if (chipData.name === item.chipName) btn.classList.add('active');
+                
+                btn.onclick = () => {
+                    const targetIdx = playlist.findIndex(p => p.menuKey === item.menuKey && p.chipName === chipData.name);
+                    playSequence(targetIdx);
+                };
+                chipsContainer.appendChild(btn);
+            });
+        }
+
+        function handleMenuClick(key) {
+            const targetIdx = playlist.findIndex(p => p.menuKey === key);
+            playSequence(targetIdx);
+        }
+    </script>
+</body>
+</html>
